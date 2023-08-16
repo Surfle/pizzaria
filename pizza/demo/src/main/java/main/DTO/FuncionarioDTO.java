@@ -1,5 +1,12 @@
 package main.DTO;
 
-public class FuncionarioDTO {
+import lombok.Data;
 
+@Data
+public class FuncionarioDTO {
+	
+	private Long id;
+	
+	private String Nome;
+	
 }
