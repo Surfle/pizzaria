@@ -4,9 +4,12 @@ import lombok.Data;
 
 @Data
 public class Sabor_tem_IngredienteDTO {
-    private Long id;
-    private String sabor;
-    private  String ingredientes;
+	
+	private Long id;
+
+    private SaborDTO sabor;
+    
+    private	IngredienteDTO ingrediente;
 
 
 }
