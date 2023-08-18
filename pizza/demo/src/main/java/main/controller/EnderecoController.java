@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import main.DTO.SaborDTO;
-import main.service.SaborService;
+import main.DTO.EnderecoDTO;
+import main.service.EnderecoService;
 
 @RestController
-@RequestMapping("/sabor")
-public class SaborController {
+@RequestMapping("/endereco")
+public class EnderecoController {
 
-	@Autowired
-	private SaborService service;
-	
-	@GetMapping()
-    public ResponseEntity<List<SaborDTO>> findAll() {
+    @Autowired
+    private EnderecoService service;
+
+    @GetMapping()
+    public ResponseEntity<List<EnderecoDTO>> findAll() {
         try {
             return ResponseEntity.ok(service.findAll());
         } catch (Exception e) {
@@ -34,35 +34,35 @@ public class SaborController {
         }
     }
 
-	@GetMapping("/{id}")
-    public ResponseEntity<SaborDTO> findById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<EnderecoDTO> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.findById(id));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-	
-	@PostMapping()
-	public ResponseEntity<SaborDTO> include(@RequestBody SaborDTO saborDTO){
-		try {
-			return ResponseEntity.ok(service.include(saborDTO));
-		}catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
-	
-    @PutMapping("/{id}")
-    public ResponseEntity<SaborDTO> edit(@PathVariable Long id, @RequestBody SaborDTO SaborDTO) {
+
+    @PostMapping()
+    public ResponseEntity<EnderecoDTO> include(@RequestBody EnderecoDTO enderecoDTO) {
         try {
-            return ResponseEntity.ok(service.edit(id, SaborDTO));
+            return ResponseEntity.ok(service.include(enderecoDTO));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EnderecoDTO> edit(@PathVariable Long id, @RequestBody EnderecoDTO enderecoDTO) {
+        try {
+            return ResponseEntity.ok(service.edit(id, enderecoDTO));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SaborDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<EnderecoDTO> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.delete(id));
         } catch (Exception e) {
@@ -70,3 +70,4 @@ public class SaborController {
         }
     }
 }
+
