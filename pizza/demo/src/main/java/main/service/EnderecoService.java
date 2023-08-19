@@ -10,13 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import main.DTO.EnderecoDTO;
+import main.entity.Cliente;
 import main.entity.Endereco;
+import main.repository.ClienteRepository;
 import main.repository.EnderecoRepository;
 
 @Service
 public class EnderecoService {
 	@Autowired
 	private EnderecoRepository repository;
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 	public List<EnderecoDTO> findAll() {
 		
@@ -48,15 +52,19 @@ public class EnderecoService {
 		return enderecoDTO;
 	}
 	
-	public EnderecoDTO include(EnderecoDTO enderecoDTO) {
-		
+	public EnderecoDTO include(Long id, EnderecoDTO enderecoDTO) {
+		Optional<Cliente> cliente = clienteRepository.findById(id);
+
+        Assert.notNull(cliente.get(), "Cliente não informado");
         Assert.notNull(enderecoDTO.getRua(), "Rua não informada!");
         Assert.isTrue(enderecoDTO.getNumero() != 0, "Número não informado");
         
 		Endereco endereco = new Endereco();
 		
 		BeanUtils.copyProperties(enderecoDTO, endereco);
-
+		endereco.setCliente(cliente.get());
+		System.out.println(cliente.get());
+		System.out.println(endereco);
 		repository.save(endereco);
 		
 		return enderecoDTO;

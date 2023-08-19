@@ -10,13 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import main.DTO.PedidoDTO;
+import main.entity.Cliente;
+import main.entity.Funcionario;
 import main.entity.Pedido;
+import main.repository.ClienteRepository;
+import main.repository.FuncionarioRepository;
 import main.repository.PedidoRepository;
 
 @Service
 public class PedidoService {
 	@Autowired
 	private PedidoRepository repository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private FuncionarioRepository funcionarioRepository;
 	
 	public List<PedidoDTO> findAll() {
 		
@@ -51,7 +59,12 @@ public class PedidoService {
 	public PedidoDTO include(PedidoDTO pedidoDTO) {
 		
         Assert.isTrue(pedidoDTO.getValor() != 0, "Valor não informado");
-        
+        Assert.isTrue(pedidoDTO.getCliente().getId() != 0, "Cliente não informado");
+        Assert.isTrue(pedidoDTO.getFuncionario().getId() != 0, "Funcionario não informado");
+                
+        Optional<Cliente> cliente = clienteRepository.findById(pedidoDTO.getCliente().getId());
+		Optional<Funcionario> funcionario = funcionarioRepository.findById(pedidoDTO.getFuncionario().getId());
+       
 		Pedido pedido = new Pedido();
 		
 		BeanUtils.copyProperties(pedidoDTO, pedido);

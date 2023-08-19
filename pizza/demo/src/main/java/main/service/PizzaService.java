@@ -63,7 +63,7 @@ public class PizzaService {
 
 	public PizzaDTO edit(Long id, PizzaDTO pizzaDTO) {
 	
-        Assert.isTrue(pizzaDTO.getTamanho() != 0, "Valor não informado");
+        Assert.isTrue(pizzaDTO.getTamanho() != 0, "Tamanho não informado");
         
         final Pizza pizza = this.repository.findById(id).orElse(null);
         

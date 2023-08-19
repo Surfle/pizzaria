@@ -43,10 +43,10 @@ public class EnderecoController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<EnderecoDTO> include(@RequestBody EnderecoDTO enderecoDTO) {
+    @PostMapping("/{id}")
+    public ResponseEntity<EnderecoDTO> include(@PathVariable Long id, @RequestBody EnderecoDTO enderecoDTO) {
         try {
-            return ResponseEntity.ok(service.include(enderecoDTO));
+            return ResponseEntity.ok(service.include(id, enderecoDTO));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

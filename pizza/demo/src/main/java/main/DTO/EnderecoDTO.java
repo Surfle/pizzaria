@@ -1,6 +1,7 @@
 package main.DTO;
 
 import lombok.Data;
+import main.entity.Cliente;
 
 @Data
 public class EnderecoDTO {
@@ -10,5 +11,5 @@ public class EnderecoDTO {
 	
 	private Long numero;
 	
-	private ClienteDTO cliente;
+	private Cliente cliente;
 }

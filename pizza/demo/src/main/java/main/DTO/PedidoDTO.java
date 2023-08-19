@@ -1,6 +1,8 @@
 package main.DTO;
 
 import lombok.Data;
+import main.entity.Cliente;
+import main.entity.Funcionario;
 
 @Data
 public class PedidoDTO {
@@ -13,8 +15,8 @@ public class PedidoDTO {
 	
 	private boolean entrega;
 	
-	private FuncionarioDTO funcionario;
+	private Funcionario funcionario;
 	
-	private ClienteDTO cliente;
+	private Cliente cliente;
 
 }
