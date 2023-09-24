@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.PizzaDTO;
+import main.dto.PizzaDto;
 import main.entity.Pizza;
 import main.repository.PizzaRepository;
 
@@ -18,77 +18,77 @@ public class PizzaService {
 	@Autowired
 	private PizzaRepository repository;
 	
-	public List<PizzaDTO> findAll() {
+	public List<PizzaDto> findAll() {
 		
 		
 		List<Pizza> pizzas = repository.findAll();
 		
-		List<PizzaDTO> pizzasDTO = new ArrayList<>();
+		List<PizzaDto> pizzasDTO = new ArrayList<>();
 
 		for(Pizza pizza: pizzas) {
-			PizzaDTO pizzaDTO = new PizzaDTO();
-			BeanUtils.copyProperties(pizza, pizzaDTO);
-			pizzasDTO.add(pizzaDTO);
+			PizzaDto pizzaDto = new PizzaDto();
+			BeanUtils.copyProperties(pizza, pizzaDto);
+			pizzasDTO.add(pizzaDto);
 
 		}
 		
 		return pizzasDTO;
 	}
 	
-	public PizzaDTO findById(Long id) {
+	public PizzaDto findById(Long id) {
 		
 		Optional<Pizza> pizza = repository.findById(id);
 		
-        Assert.notNull(pizza.get(), "Pizza não encontrada!");
+        Assert.notNull(pizza.isPresent(), "Pizza não encontrada!");
 		
-		PizzaDTO pizzaDTO = new PizzaDTO();
-		
-		BeanUtils.copyProperties(pizza.get(), pizzaDTO);
+		PizzaDto pizzaDto = new PizzaDto();
+		if(pizza.isPresent())
+			BeanUtils.copyProperties(pizza.get(), pizzaDto);
 
-		return pizzaDTO;
+		return pizzaDto;
 	}
 	
-	public PizzaDTO include(PizzaDTO pizzaDTO) {
+	public PizzaDto include(PizzaDto pizzaDto) {
 		
-        Assert.isTrue(pizzaDTO.getTamanho() != 0, "Valor não informado");
+        Assert.isTrue(pizzaDto.getTamanho() != 0, "Valor não informado");
         
 		Pizza pizza = new Pizza();
 		
-		BeanUtils.copyProperties(pizzaDTO, pizza);
+		BeanUtils.copyProperties(pizzaDto, pizza);
 
 		repository.save(pizza);
 		
-		return pizzaDTO;
+		return pizzaDto;
 	}
 
-	public PizzaDTO edit(Long id, PizzaDTO pizzaDTO) {
+	public PizzaDto edit(Long id, PizzaDto pizzaDto) {
 	
-        Assert.isTrue(pizzaDTO.getTamanho() != 0, "Tamanho não informado");
+        Assert.isTrue(pizzaDto.getTamanho() != 0, "Tamanho não informado");
         
         final Pizza pizza = this.repository.findById(id).orElse(null);
         
         Assert.notNull(pizza, "Pizza não encontrada");
         
-        pizzaDTO.setId(id);
-		BeanUtils.copyProperties(pizzaDTO, pizza);
+        pizzaDto.setId(id);
+		BeanUtils.copyProperties(pizzaDto, pizza);
 
 		repository.save(pizza);
 		
-		return pizzaDTO;
+		return pizzaDto;
 	}
 
-	public PizzaDTO delete(Long id) {
+	public PizzaDto delete(Long id) {
 		
 		Optional<Pizza> pizza = repository.findById(id);
 		
-        Assert.notNull(pizza.get(), "Pizza não encontrada!");
+        Assert.notNull(pizza.isPresent(), "Pizza não encontrada!");
 
-		PizzaDTO pizzaDTO = new PizzaDTO();
-		
-		BeanUtils.copyProperties(pizza.get(), pizzaDTO);
+		PizzaDto pizzaDto = new PizzaDto();
+		if(pizza.isPresent())
+			BeanUtils.copyProperties(pizza.get(), pizzaDto);
 
 		repository.deleteById(id);
 		
-		return pizzaDTO;
+		return pizzaDto;
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.ClienteDTO;
+import main.dto.ClienteDto;
 import main.entity.Cliente;
 import main.repository.ClienteRepository;
 
@@ -19,63 +19,65 @@ public class ClienteService {
     @Autowired
     private ClienteRepository repository;
 
-    public List<ClienteDTO> findAll() {
+    public List<ClienteDto> findAll() {
         List<Cliente> clientes = repository.findAll();
-        List<ClienteDTO> clientesDTO = new ArrayList<>();
+        List<ClienteDto> clientesDTO = new ArrayList<>();
 
         for (Cliente cliente : clientes) {
-            ClienteDTO clienteDTO = new ClienteDTO();
-            BeanUtils.copyProperties(cliente, clienteDTO);
-            clientesDTO.add(clienteDTO);
+            ClienteDto clienteDto = new ClienteDto();
+            BeanUtils.copyProperties(cliente, clienteDto);
+            clientesDTO.add(clienteDto);
         }
 
         return clientesDTO;
     }
 
-    public ClienteDTO findById(Long id) {
+    public ClienteDto findById(Long id) {
         Optional<Cliente> cliente = repository.findById(id);
-        Assert.notNull(cliente.get(), "Cliente não encontrado!");
+        Assert.notNull(cliente.isPresent(), "Cliente não encontrado!");
 
-        ClienteDTO clienteDTO = new ClienteDTO();
-        BeanUtils.copyProperties(cliente.get(), clienteDTO);
+        ClienteDto clienteDto = new ClienteDto();
+        if(cliente.isPresent())
+        	BeanUtils.copyProperties(cliente.get(), clienteDto);
 
-        return clienteDTO;
+        return clienteDto;
     }
 
-    public ClienteDTO include(ClienteDTO clienteDTO) {
-        Assert.notNull(clienteDTO.getNome(), "Nome não informado!");
+    public ClienteDto include(ClienteDto clienteDto) {
+        Assert.notNull(clienteDto.getNome(), "Nome não informado!");
 
         Cliente cliente = new Cliente();
-        BeanUtils.copyProperties(clienteDTO, cliente);
+        BeanUtils.copyProperties(clienteDto, cliente);
 
         repository.save(cliente);
 
-        return clienteDTO;
+        return clienteDto;
     }
 
-    public ClienteDTO edit(Long id, ClienteDTO clienteDTO) {
-        Assert.notNull(clienteDTO.getNome(), "Nome não informado!");
+    public ClienteDto edit(Long id, ClienteDto clienteDto) {
+        Assert.notNull(clienteDto.getNome(), "Nome não informado!");
 
         final Cliente cliente = this.repository.findById(id).orElse(null);
         Assert.notNull(cliente, "Cliente não encontrado");
 
-        clienteDTO.setId(id);
-        BeanUtils.copyProperties(clienteDTO, cliente);
+        clienteDto.setId(id);
+        BeanUtils.copyProperties(clienteDto, cliente);
 
         repository.save(cliente);
 
-        return clienteDTO;
+        return clienteDto;
     }
 
-    public ClienteDTO delete(Long id) {
+    public ClienteDto delete(Long id) {
         Optional<Cliente> cliente = repository.findById(id);
-        Assert.notNull(cliente.get(), "Cliente não encontrado!");
+        Assert.notNull(cliente.isPresent(), "Cliente não encontrado!");
 
-        ClienteDTO clienteDTO = new ClienteDTO();
-        BeanUtils.copyProperties(cliente.get(), clienteDTO);
+        ClienteDto clienteDto = new ClienteDto();
+        if(cliente.isPresent())
+        	BeanUtils.copyProperties(cliente.get(), clienteDto);
 
         repository.deleteById(id);
 
-        return clienteDTO;
+        return clienteDto;
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.ProdutoDTO;
+import main.dto.ProdutoDto;
 import main.entity.Produto;
 import main.repository.ProdutoRepository;
 
@@ -18,79 +18,81 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepository repository;
 	
-	public List<ProdutoDTO> findAll() {
+	public List<ProdutoDto> findAll() {
 		
 		
 		List<Produto> produtos = repository.findAll();
 		
-		List<ProdutoDTO> produtosDTO = new ArrayList<>();
+		List<ProdutoDto> produtosDTO = new ArrayList<>();
 
 		for(Produto produto: produtos) {
-			ProdutoDTO produtoDTO = new ProdutoDTO();
-			BeanUtils.copyProperties(produto, produtoDTO);
-			produtosDTO.add(produtoDTO);
+			ProdutoDto produtoDto = new ProdutoDto();
+			BeanUtils.copyProperties(produto, produtoDto);
+			produtosDTO.add(produtoDto);
 
 		}
 		
 		return produtosDTO;
 	}
 	
-	public ProdutoDTO findById(Long id) {
+	public ProdutoDto findById(Long id) {
 		
 		Optional<Produto> produto = repository.findById(id);
 		
-        Assert.notNull(produto.get(), "Produto não encontrado!");
+        Assert.notNull(produto.isPresent(), "Produto não encontrado!");
 		
-		ProdutoDTO produtoDTO = new ProdutoDTO();
+		ProdutoDto produtoDto = new ProdutoDto();
 		
-		BeanUtils.copyProperties(produto.get(), produtoDTO);
+		if(produto.isPresent())
+			BeanUtils.copyProperties(produto.get(), produtoDto);
 
-		return produtoDTO;
+		return produtoDto;
 	}
 	
-	public ProdutoDTO include(ProdutoDTO produtoDTO) {
+	public ProdutoDto include(ProdutoDto produtoDto) {
 		
-        Assert.isTrue(produtoDTO.getNome() != null, "Nome não informado!");
-        Assert.isTrue(produtoDTO.getValor() != 0, "Valor não informado");
+        Assert.isTrue(produtoDto.getNome() != null, "Nome não informado!");
+        Assert.isTrue(produtoDto.getValor() != 0, "Valor não informado");
         
 		Produto produto = new Produto();
 		
-		BeanUtils.copyProperties(produtoDTO, produto);
+		BeanUtils.copyProperties(produtoDto, produto);
 
 		repository.save(produto);
 		
-		return produtoDTO;
+		return produtoDto;
 	}
 
-	public ProdutoDTO edit(Long id, ProdutoDTO produtoDTO) {
+	public ProdutoDto edit(Long id, ProdutoDto produtoDto) {
 	
-        Assert.notNull(produtoDTO.getNome(), "Nome não informado!");
-        Assert.isTrue(produtoDTO.getValor() != 0, "Valor não informado");
+        Assert.notNull(produtoDto.getNome(), "Nome não informado!");
+        Assert.isTrue(produtoDto.getValor() != 0, "Valor não informado");
         
         final Produto produto = this.repository.findById(id).orElse(null);
         
         Assert.notNull(produto, "Produto não encontrado");
         
-        produtoDTO.setId(id);
-		BeanUtils.copyProperties(produtoDTO, produto);
+        produtoDto.setId(id);
+		BeanUtils.copyProperties(produtoDto, produto);
 
 		repository.save(produto);
 		
-		return produtoDTO;
+		return produtoDto;
 	}
 
-	public ProdutoDTO delete(Long id) {
+	public ProdutoDto delete(Long id) {
 		
 		Optional<Produto> produto = repository.findById(id);
 		
-        Assert.notNull(produto.get(), "Produto não encontrado!");
+        Assert.notNull(produto.isPresent(), "Produto não encontrado!");
 
-		ProdutoDTO produtoDTO = new ProdutoDTO();
+		ProdutoDto produtoDto = new ProdutoDto();
 		
-		BeanUtils.copyProperties(produto.get(), produtoDTO);
+		if(produto.isPresent())
+			BeanUtils.copyProperties(produto.get(), produtoDto);
 
 		repository.deleteById(id);
 		
-		return produtoDTO;
+		return produtoDto;
 	}
 }

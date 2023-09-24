@@ -15,5 +15,5 @@ public class Funcionario {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private String Nome;
+	private String nome;
 }

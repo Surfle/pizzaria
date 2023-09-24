@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import main.DTO.EnderecoDTO;
+import main.dto.EnderecoDto;
 import main.service.EnderecoService;
 
 @RestController
@@ -26,7 +26,7 @@ public class EnderecoController {
     private EnderecoService service;
 
     @GetMapping()
-    public ResponseEntity<List<EnderecoDTO>> findAll() {
+    public ResponseEntity<List<EnderecoDto>> findAll() {
         try {
             return ResponseEntity.ok(service.findAll());
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<EnderecoDto> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.findById(id));
         } catch (Exception e) {
@@ -44,25 +44,25 @@ public class EnderecoController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> include(@PathVariable Long id, @RequestBody EnderecoDTO enderecoDTO) {
+    public ResponseEntity<EnderecoDto> include(@PathVariable Long id, @RequestBody EnderecoDto enderecoDto) {
         try {
-            return ResponseEntity.ok(service.include(id, enderecoDTO));
+            return ResponseEntity.ok(service.include(id, enderecoDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> edit(@PathVariable Long id, @RequestBody EnderecoDTO enderecoDTO) {
+    public ResponseEntity<EnderecoDto> edit(@PathVariable Long id, @RequestBody EnderecoDto enderecoDto) {
         try {
-            return ResponseEntity.ok(service.edit(id, enderecoDTO));
+            return ResponseEntity.ok(service.edit(id, enderecoDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<EnderecoDto> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.delete(id));
         } catch (Exception e) {

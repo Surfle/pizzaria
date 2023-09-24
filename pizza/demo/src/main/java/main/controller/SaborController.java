@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import main.DTO.SaborDTO;
+import main.dto.SaborDto;
 import main.service.SaborService;
 
 @RestController
@@ -26,7 +26,7 @@ public class SaborController {
 	private SaborService service;
 	
 	@GetMapping()
-    public ResponseEntity<List<SaborDTO>> findAll() {
+    public ResponseEntity<List<SaborDto>> findAll() {
         try {
             return ResponseEntity.ok(service.findAll());
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class SaborController {
     }
 
 	@GetMapping("/{id}")
-    public ResponseEntity<SaborDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<SaborDto> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.findById(id));
         } catch (Exception e) {
@@ -44,25 +44,25 @@ public class SaborController {
     }
 	
 	@PostMapping()
-	public ResponseEntity<SaborDTO> include(@RequestBody SaborDTO saborDTO){
+	public ResponseEntity<SaborDto> include(@RequestBody SaborDto saborDto){
 		try {
-			return ResponseEntity.ok(service.include(saborDTO));
+			return ResponseEntity.ok(service.include(saborDto));
 		}catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 	
     @PutMapping("/{id}")
-    public ResponseEntity<SaborDTO> edit(@PathVariable Long id, @RequestBody SaborDTO SaborDTO) {
+    public ResponseEntity<SaborDto> edit(@PathVariable Long id, @RequestBody SaborDto saborDto) {
         try {
-            return ResponseEntity.ok(service.edit(id, SaborDTO));
+            return ResponseEntity.ok(service.edit(id, saborDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SaborDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<SaborDto> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.delete(id));
         } catch (Exception e) {

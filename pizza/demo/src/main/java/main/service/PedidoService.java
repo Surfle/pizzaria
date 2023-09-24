@@ -9,99 +9,90 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.PedidoDTO;
-import main.entity.Cliente;
-import main.entity.Funcionario;
+import main.dto.PedidoDto;
 import main.entity.Pedido;
-import main.repository.ClienteRepository;
-import main.repository.FuncionarioRepository;
 import main.repository.PedidoRepository;
 
 @Service
 public class PedidoService {
 	@Autowired
 	private PedidoRepository repository;
-	@Autowired
-	private ClienteRepository clienteRepository;
-	@Autowired
-	private FuncionarioRepository funcionarioRepository;
 	
-	public List<PedidoDTO> findAll() {
+	public List<PedidoDto> findAll() {
 		
 		
 		List<Pedido> pedidos = repository.findAll();
 		
-		List<PedidoDTO> pedidosDTO = new ArrayList<>();
+		List<PedidoDto> pedidosDTO = new ArrayList<>();
 
 		for(Pedido pedido: pedidos) {
-			PedidoDTO pedidoDTO = new PedidoDTO();
-			BeanUtils.copyProperties(pedido, pedidoDTO);
-			pedidosDTO.add(pedidoDTO);
+			PedidoDto pedidoDto = new PedidoDto();
+			BeanUtils.copyProperties(pedido, pedidoDto);
+			pedidosDTO.add(pedidoDto);
 
 		}
 		
 		return pedidosDTO;
 	}
 	
-	public PedidoDTO findById(Long id) {
+	public PedidoDto findById(Long id) {
 		
 		Optional<Pedido> pedido = repository.findById(id);
 		
-        Assert.notNull(pedido.get(), "Pedido não encontrado!");
+        Assert.notNull(pedido.isPresent(), "Pedido não encontrado!");
 		
-		PedidoDTO pedidoDTO = new PedidoDTO();
-		
-		BeanUtils.copyProperties(pedido.get(), pedidoDTO);
+		PedidoDto pedidoDto = new PedidoDto();
 
-		return pedidoDTO;
+		if(pedido.isPresent())
+			BeanUtils.copyProperties(pedido.get(), pedidoDto);
+
+		return pedidoDto;
 	}
 	
-	public PedidoDTO include(PedidoDTO pedidoDTO) {
+	public PedidoDto include(PedidoDto pedidoDto) {
 		
-        Assert.isTrue(pedidoDTO.getValor() != 0, "Valor não informado");
-        Assert.isTrue(pedidoDTO.getCliente().getId() != 0, "Cliente não informado");
-        Assert.isTrue(pedidoDTO.getFuncionario().getId() != 0, "Funcionario não informado");
-                
-        Optional<Cliente> cliente = clienteRepository.findById(pedidoDTO.getCliente().getId());
-		Optional<Funcionario> funcionario = funcionarioRepository.findById(pedidoDTO.getFuncionario().getId());
-       
+        Assert.isTrue(pedidoDto.getValor() != 0, "Valor não informado");
+        Assert.isTrue(pedidoDto.getCliente().getId() != 0, "Cliente não informado");
+        Assert.isTrue(pedidoDto.getFuncionario().getId() != 0, "Funcionario não informado");
+                      
 		Pedido pedido = new Pedido();
 		
-		BeanUtils.copyProperties(pedidoDTO, pedido);
+		BeanUtils.copyProperties(pedidoDto, pedido);
 
 		repository.save(pedido);
 		
-		return pedidoDTO;
+		return pedidoDto;
 	}
 
-	public PedidoDTO edit(Long id, PedidoDTO pedidoDTO) {
+	public PedidoDto edit(Long id, PedidoDto pedidoDto) {
 	
-        Assert.isTrue(pedidoDTO.getValor() != 0, "Valor não informado");
+        Assert.isTrue(pedidoDto.getValor() != 0, "Valor não informado");
         
         final Pedido pedido = this.repository.findById(id).orElse(null);
         
         Assert.notNull(pedido, "Pedido não encontrado");
         
-        pedidoDTO.setId(id);
-		BeanUtils.copyProperties(pedidoDTO, pedido);
+        pedidoDto.setId(id);
+		BeanUtils.copyProperties(pedidoDto, pedido);
 
 		repository.save(pedido);
 		
-		return pedidoDTO;
+		return pedidoDto;
 	}
 
-	public PedidoDTO delete(Long id) {
+	public PedidoDto delete(Long id) {
 		
 		Optional<Pedido> pedido = repository.findById(id);
 		
-        Assert.notNull(pedido.get(), "Pedido não encontrado!");
+        Assert.notNull(pedido.isPresent(), "Pedido não encontrado!");
 
-		PedidoDTO pedidoDTO = new PedidoDTO();
+		PedidoDto pedidoDto = new PedidoDto();
 		
-		BeanUtils.copyProperties(pedido.get(), pedidoDTO);
+		if(pedido.isPresent())
+			BeanUtils.copyProperties(pedido.get(), pedidoDto);
 
 		repository.deleteById(id);
 		
-		return pedidoDTO;
+		return pedidoDto;
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.EnderecoDTO;
+import main.dto.EnderecoDto;
 import main.entity.Cliente;
 import main.entity.Endereco;
 import main.repository.ClienteRepository;
@@ -22,15 +22,15 @@ public class EnderecoService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
-	public List<EnderecoDTO> findAll() {
+	public List<EnderecoDto> findAll() {
 		
 		
 		List<Endereco> enderecos = repository.findAll();
 		
-		List<EnderecoDTO> enderecosDTO = new ArrayList<>();
+		List<EnderecoDto> enderecosDTO = new ArrayList<>();
 
 		for(Endereco endereco: enderecos) {
-			EnderecoDTO enderecodto = new EnderecoDTO();
+			EnderecoDto enderecodto = new EnderecoDto();
 			BeanUtils.copyProperties(endereco, enderecodto);
 			enderecosDTO.add(enderecodto);
 
@@ -39,66 +39,69 @@ public class EnderecoService {
 		return enderecosDTO;
 	}
 	
-	public EnderecoDTO findById(Long id) {
+	public EnderecoDto findById(Long id) {
 		
 		Optional<Endereco> endereco = repository.findById(id);
 		
-        Assert.notNull(endereco.get(), "Endereco não encontrado!");
+        Assert.notNull(endereco.isPresent(), "Endereco não encontrado!");
 		
-		EnderecoDTO enderecoDTO = new EnderecoDTO();
+		EnderecoDto enderecoDto = new EnderecoDto();
 		
-		BeanUtils.copyProperties(endereco.get(), enderecoDTO);
+		if(endereco.isPresent())
+			BeanUtils.copyProperties(endereco.get(), enderecoDto);
 
-		return enderecoDTO;
+		return enderecoDto;
 	}
 	
-	public EnderecoDTO include(Long id, EnderecoDTO enderecoDTO) {
+	public EnderecoDto include(Long id, EnderecoDto enderecoDto) {
 		Optional<Cliente> cliente = clienteRepository.findById(id);
 
-        Assert.notNull(cliente.get(), "Cliente não informado");
-        Assert.notNull(enderecoDTO.getRua(), "Rua não informada!");
-        Assert.isTrue(enderecoDTO.getNumero() != 0, "Número não informado");
+        Assert.notNull(cliente.isPresent(), "Cliente não informado");
+        Assert.notNull(enderecoDto.getRua(), "Rua não informada!");
+        Assert.isTrue(enderecoDto.getNumero() != 0, "Número não informado");
         
 		Endereco endereco = new Endereco();
 		
-		BeanUtils.copyProperties(enderecoDTO, endereco);
-		endereco.setCliente(cliente.get());
-		System.out.println(cliente.get());
-		System.out.println(endereco);
+		BeanUtils.copyProperties(enderecoDto, endereco);
+		
+		if(cliente.isPresent())
+			endereco.setCliente(cliente.get());
+		
 		repository.save(endereco);
 		
-		return enderecoDTO;
+		return enderecoDto;
 	}
 
-	public EnderecoDTO edit(Long id, EnderecoDTO enderecoDTO) {
+	public EnderecoDto edit(Long id, EnderecoDto enderecoDto) {
 	
-        Assert.notNull(enderecoDTO.getRua(), "Rua não informada!");
-        Assert.isTrue(enderecoDTO.getNumero() != 0, "Número não informado");
+        Assert.notNull(enderecoDto.getRua(), "Rua não informada!");
+        Assert.isTrue(enderecoDto.getNumero() != 0, "Número não informado");
         
         final Endereco endereco = this.repository.findById(id).orElse(null);
         
         Assert.notNull(endereco, "Endereco não encontrado");
         
-        enderecoDTO.setId(id);
-		BeanUtils.copyProperties(enderecoDTO, endereco);
+        enderecoDto.setId(id);
+		BeanUtils.copyProperties(enderecoDto, endereco);
 
 		repository.save(endereco);
 		
-		return enderecoDTO;
+		return enderecoDto;
 	}
 
-	public EnderecoDTO delete(Long id) {
+	public EnderecoDto delete(Long id) {
 		
 		Optional<Endereco> endereco = repository.findById(id);
 		
-        Assert.notNull(endereco.get(), "Endereco não encontrado!");
+        Assert.notNull(endereco.isPresent(), "Endereco não encontrado!");
 
-		EnderecoDTO enderecoDTO = new EnderecoDTO();
-		
-		BeanUtils.copyProperties(endereco.get(), enderecoDTO);
+		EnderecoDto enderecoDto = new EnderecoDto();
+        
+		if(endereco.isPresent())
+			BeanUtils.copyProperties(endereco.get(), enderecoDto);
 
 		repository.deleteById(id);
 		
-		return enderecoDTO;
+		return enderecoDto;
 	}
 }

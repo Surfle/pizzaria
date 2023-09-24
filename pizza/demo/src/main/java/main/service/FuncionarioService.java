@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.FuncionarioDTO;
+import main.dto.FuncionarioDto;
 import main.entity.Funcionario;
 import main.repository.FuncionarioRepository;
 
@@ -18,77 +18,79 @@ public class FuncionarioService {
 	@Autowired
 	private FuncionarioRepository repository;
 	
-	public List<FuncionarioDTO> findAll() {
+	public List<FuncionarioDto> findAll() {
 		
 		
 		List<Funcionario> funcionarios = repository.findAll();
 		
-		List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
+		List<FuncionarioDto> funcionariosDTO = new ArrayList<>();
 
 		for(Funcionario funcionario: funcionarios) {
-			FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
-			BeanUtils.copyProperties(funcionario, funcionarioDTO);
-			funcionariosDTO.add(funcionarioDTO);
+			FuncionarioDto funcionarioDto = new FuncionarioDto();
+			BeanUtils.copyProperties(funcionario, funcionarioDto);
+			funcionariosDTO.add(funcionarioDto);
 
 		}
 		
 		return funcionariosDTO;
 	}
 	
-	public FuncionarioDTO findById(Long id) {
+	public FuncionarioDto findById(Long id) {
 		
 		Optional<Funcionario> funcionario = repository.findById(id);
 		
-        Assert.notNull(funcionario.get(), "Funcionario não encontrado!");
+        Assert.notNull(funcionario.isPresent(), "Funcionario não encontrado!");
 		
-		FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
+		FuncionarioDto funcionarioDto = new FuncionarioDto();
 		
-		BeanUtils.copyProperties(funcionario.get(), funcionarioDTO);
+		if(funcionario.isPresent())
+			BeanUtils.copyProperties(funcionario.get(), funcionarioDto);
 
-		return funcionarioDTO;
+		return funcionarioDto;
 	}
 	
-	public FuncionarioDTO include(FuncionarioDTO funcionarioDTO) {
+	public FuncionarioDto include(FuncionarioDto funcionarioDto) {
 		
-        Assert.isTrue(funcionarioDTO.getNome() != null, "Nome não informado!");
+        Assert.isTrue(funcionarioDto.getNome() != null, "Nome não informado!");
         
 		Funcionario funcionario = new Funcionario();
 		
-		BeanUtils.copyProperties(funcionarioDTO, funcionario);
+		BeanUtils.copyProperties(funcionarioDto, funcionario);
 
 		repository.save(funcionario);
 		
-		return funcionarioDTO;
+		return funcionarioDto;
 	}
 
-	public FuncionarioDTO edit(Long id, FuncionarioDTO funcionarioDTO) {
+	public FuncionarioDto edit(Long id, FuncionarioDto funcionarioDto) {
 	
-        Assert.notNull(funcionarioDTO.getNome(), "Nome não informado!");
+        Assert.notNull(funcionarioDto.getNome(), "Nome não informado!");
         
         final Funcionario funcionario = this.repository.findById(id).orElse(null);
         
         Assert.notNull(funcionario, "Funcionario não encontrado");
         
-        funcionarioDTO.setId(id);
-		BeanUtils.copyProperties(funcionarioDTO, funcionario);
+        funcionarioDto.setId(id);
+		BeanUtils.copyProperties(funcionarioDto, funcionario);
 
 		repository.save(funcionario);
 		
-		return funcionarioDTO;
+		return funcionarioDto;
 	}
 
-	public FuncionarioDTO delete(Long id) {
+	public FuncionarioDto delete(Long id) {
 		
 		Optional<Funcionario> funcionario = repository.findById(id);
 		
-        Assert.notNull(funcionario.get(), "Funcionario não encontrado!");
+        Assert.notNull(funcionario.isPresent(), "Funcionario não encontrado!");
 
-		FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
+		FuncionarioDto funcionarioDto = new FuncionarioDto();
 		
-		BeanUtils.copyProperties(funcionario.get(), funcionarioDTO);
+		if(funcionario.isPresent())
+			BeanUtils.copyProperties(funcionario.get(), funcionarioDto);
 
 		repository.deleteById(id);
 		
-		return funcionarioDTO;
+		return funcionarioDto;
 	}
 }

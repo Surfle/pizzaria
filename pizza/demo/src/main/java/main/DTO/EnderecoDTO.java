@@ -1,10 +1,10 @@
-package main.DTO;
+package main.dto;
 
 import lombok.Data;
 import main.entity.Cliente;
 
 @Data
-public class EnderecoDTO {
+public class EnderecoDto {
 	private Long id;
 	
 	private String rua;

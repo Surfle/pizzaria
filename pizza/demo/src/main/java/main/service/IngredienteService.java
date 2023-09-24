@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import main.DTO.IngredienteDTO;
+import main.dto.IngredienteDto;
 import main.entity.Ingrediente;
 import main.repository.IngredienteRepository;
 
@@ -18,79 +18,81 @@ public class IngredienteService {
 	@Autowired
 	private IngredienteRepository repository;
 	
-	public List<IngredienteDTO> findAll() {
+	public List<IngredienteDto> findAll() {
 		
 		
 		List<Ingrediente> ingredientes = repository.findAll();
 		
-		List<IngredienteDTO> ingredientesDTO = new ArrayList<>();
+		List<IngredienteDto> ingredientesDTO = new ArrayList<>();
 
 		for(Ingrediente ingrediente: ingredientes) {
-			IngredienteDTO ingredienteDTO = new IngredienteDTO();
-			BeanUtils.copyProperties(ingrediente, ingredienteDTO);
-			ingredientesDTO.add(ingredienteDTO);
+			IngredienteDto ingredienteDto = new IngredienteDto();
+			BeanUtils.copyProperties(ingrediente, ingredienteDto);
+			ingredientesDTO.add(ingredienteDto);
 
 		}
 		
 		return ingredientesDTO;
 	}
 	
-	public IngredienteDTO findById(Long id) {
+	public IngredienteDto findById(Long id) {
 		
 		Optional<Ingrediente> ingrediente = repository.findById(id);
 		
-        Assert.notNull(ingrediente.get(), "Ingrediente não encontrado!");
+        Assert.notNull(ingrediente.isPresent(), "Ingrediente não encontrado!");
 		
-		IngredienteDTO ingredienteDTO = new IngredienteDTO();
-		
-		BeanUtils.copyProperties(ingrediente.get(), ingredienteDTO);
+		IngredienteDto ingredienteDto = new IngredienteDto();
+	
+		if(ingrediente.isPresent())
+			BeanUtils.copyProperties(ingrediente.get(), ingredienteDto);
 
-		return ingredienteDTO;
+		return ingredienteDto;
 	}
 	
-	public IngredienteDTO include(IngredienteDTO ingredienteDTO) {
+	public IngredienteDto include(IngredienteDto ingredienteDto) {
 		
-        Assert.isTrue(ingredienteDTO.getNome() != null, "Nome não informado!");
-        Assert.isTrue(ingredienteDTO.getValor() != 0, "Valor não informado");
+        Assert.isTrue(ingredienteDto.getNome() != null, "Nome não informado!");
+        Assert.isTrue(ingredienteDto.getValor() != 0, "Valor não informado");
         
 		Ingrediente ingrediente = new Ingrediente();
 		
-		BeanUtils.copyProperties(ingredienteDTO, ingrediente);
+		BeanUtils.copyProperties(ingredienteDto, ingrediente);
 
 		repository.save(ingrediente);
 		
-		return ingredienteDTO;
+		return ingredienteDto;
 	}
 
-	public IngredienteDTO edit(Long id, IngredienteDTO ingredienteDTO) {
+	public IngredienteDto edit(Long id, IngredienteDto ingredienteDto) {
 	
-        Assert.notNull(ingredienteDTO.getNome(), "Nome não informado!");
-        Assert.isTrue(ingredienteDTO.getValor() != 0, "Valor não informado");
+        Assert.notNull(ingredienteDto.getNome(), "Nome não informado!");
+        Assert.isTrue(ingredienteDto.getValor() != 0, "Valor não informado");
         
         final Ingrediente ingrediente = this.repository.findById(id).orElse(null);
         
         Assert.notNull(ingrediente, "Ingrediente não encontrado");
         
-        ingredienteDTO.setId(id);
-		BeanUtils.copyProperties(ingredienteDTO, ingrediente);
+        ingredienteDto.setId(id);
+		BeanUtils.copyProperties(ingredienteDto, ingrediente);
 
 		repository.save(ingrediente);
 		
-		return ingredienteDTO;
+		return ingredienteDto;
 	}
 
-	public IngredienteDTO delete(Long id) {
+	public IngredienteDto delete(Long id) {
 		
 		Optional<Ingrediente> ingrediente = repository.findById(id);
 		
-        Assert.notNull(ingrediente.get(), "Ingrediente não encontrado!");
+        Assert.notNull(ingrediente.isPresent(), "Ingrediente não encontrado!");
 
-		IngredienteDTO ingredienteDTO = new IngredienteDTO();
-		
-		BeanUtils.copyProperties(ingrediente.get(), ingredienteDTO);
+		IngredienteDto ingredienteDto = new IngredienteDto();
+
+		if(ingrediente.isPresent())
+			BeanUtils.copyProperties(ingrediente.get(), ingredienteDto);
 
 		repository.deleteById(id);
 		
-		return ingredienteDTO;
+		return ingredienteDto;
 	}
 }

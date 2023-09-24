@@ -1,9 +1,9 @@
-package main.DTO;
+package main.dto;
 
 import lombok.Data;
 
 @Data
-public class SaborDTO {
+public class SaborDto {
 
     private Long id;
     

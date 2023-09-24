@@ -1,9 +1,9 @@
-package main.DTO;
+package main.dto;
 
 import lombok.Data;
 
 @Data
-public class PizzaDTO {
+public class PizzaDto {
 	
     private Long id;
     

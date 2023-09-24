@@ -1,11 +1,11 @@
-package main.DTO;
+package main.dto;
 
 import lombok.Data;
 import main.entity.Cliente;
 import main.entity.Funcionario;
 
 @Data
-public class PedidoDTO {
+public class PedidoDto {
 	
 	private Long id;
 	

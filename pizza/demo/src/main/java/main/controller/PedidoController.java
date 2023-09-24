@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import main.DTO.PedidoDTO;
+import main.dto.PedidoDto;
 import main.service.PedidoService;
 
 @RestController
@@ -26,7 +26,7 @@ public class PedidoController {
     private PedidoService service;
 
     @GetMapping()
-    public ResponseEntity<List<PedidoDTO>> findAll() {
+    public ResponseEntity<List<PedidoDto>> findAll() {
         try {
             return ResponseEntity.ok(service.findAll());
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<PedidoDto> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.findById(id));
         } catch (Exception e) {
@@ -44,25 +44,25 @@ public class PedidoController {
     }
 
     @PostMapping()
-    public ResponseEntity<PedidoDTO> include(@RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDto> include(@RequestBody PedidoDto pedidoDto) {
         try {
-            return ResponseEntity.ok(service.include(pedidoDTO));
+            return ResponseEntity.ok(service.include(pedidoDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoDTO> edit(@PathVariable Long id, @RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDto> edit(@PathVariable Long id, @RequestBody PedidoDto pedidoDto) {
         try {
-            return ResponseEntity.ok(service.edit(id, pedidoDTO));
+            return ResponseEntity.ok(service.edit(id, pedidoDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<PedidoDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<PedidoDto> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.delete(id));
         } catch (Exception e) {

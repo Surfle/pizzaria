@@ -18,6 +18,6 @@ public class Cliente {
 	
 	private String nome;
 	
-	private String Numero;
+	private String numero;
 	
 }

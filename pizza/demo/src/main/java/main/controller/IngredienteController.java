@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import main.DTO.IngredienteDTO;
+import main.dto.IngredienteDto;
 import main.service.IngredienteService;
 
 @RestController
@@ -26,7 +26,7 @@ public class IngredienteController {
     private IngredienteService service;
 
     @GetMapping()
-    public ResponseEntity<List<IngredienteDTO>> findAll() {
+    public ResponseEntity<List<IngredienteDto>> findAll() {
         try {
             return ResponseEntity.ok(service.findAll());
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class IngredienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<IngredienteDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<IngredienteDto> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.findById(id));
         } catch (Exception e) {
@@ -44,25 +44,25 @@ public class IngredienteController {
     }
 
     @PostMapping()
-    public ResponseEntity<IngredienteDTO> include(@RequestBody IngredienteDTO ingredienteDTO) {
+    public ResponseEntity<IngredienteDto> include(@RequestBody IngredienteDto ingredienteDto) {
         try {
-            return ResponseEntity.ok(service.include(ingredienteDTO));
+            return ResponseEntity.ok(service.include(ingredienteDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<IngredienteDTO> edit(@PathVariable Long id, @RequestBody IngredienteDTO ingredienteDTO) {
+    public ResponseEntity<IngredienteDto> edit(@PathVariable Long id, @RequestBody IngredienteDto ingredienteDto) {
         try {
-            return ResponseEntity.ok(service.edit(id, ingredienteDTO));
+            return ResponseEntity.ok(service.edit(id, ingredienteDto));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<IngredienteDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<IngredienteDto> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(service.delete(id));
         } catch (Exception e) {

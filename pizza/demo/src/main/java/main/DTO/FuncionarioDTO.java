@@ -1,12 +1,12 @@
-package main.DTO;
+package main.dto;
 
 import lombok.Data;
 
 @Data
-public class FuncionarioDTO {
+public class FuncionarioDto {
 	
 	private Long id;
 	
-	private String Nome;
+	private String nome;
 	
 }
