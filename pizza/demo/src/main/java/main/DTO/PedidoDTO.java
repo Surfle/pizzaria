@@ -3,6 +3,9 @@ package main.dto;
 import lombok.Data;
 import main.entity.Cliente;
 import main.entity.Funcionario;
+import main.entity.Pizza;
+import main.entity.Produto;
+import main.entity.Sabor;
 
 @Data
 public class PedidoDto {
@@ -18,5 +21,8 @@ public class PedidoDto {
 	private Funcionario funcionario;
 	
 	private Cliente cliente;
+	
+	private Sabor sabor;
 
+	private Produto produto;
 }

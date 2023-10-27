@@ -51,14 +51,15 @@ public class PedidoService {
 	
 	public PedidoDto include(PedidoDto pedidoDto) {
 		
-        Assert.isTrue(pedidoDto.getValor() != 0, "Valor não informado");
+      //  Assert.isTrue(pedidoDto.getValor() != 0, "Valor não informado");
         Assert.isTrue(pedidoDto.getCliente().getId() != 0, "Cliente não informado");
         Assert.isTrue(pedidoDto.getFuncionario().getId() != 0, "Funcionario não informado");
-                      
+                 
+		pedidoDto.setValor(pedidoDto.getValor()+pedidoDto.getProduto().getValor()+pedidoDto.getSabor().getValor());
+        
 		Pedido pedido = new Pedido();
-		
-		BeanUtils.copyProperties(pedidoDto, pedido);
 
+		BeanUtils.copyProperties(pedidoDto, pedido);
 		repository.save(pedido);
 		
 		return pedidoDto;
@@ -66,7 +67,7 @@ public class PedidoService {
 
 	public PedidoDto edit(Long id, PedidoDto pedidoDto) {
 	
-        Assert.isTrue(pedidoDto.getValor() != 0, "Valor não informado");
+        //Assert.isTrue(pedidoDto.getValor() != 0, "Valor não informado");
         
         final Pedido pedido = this.repository.findById(id).orElse(null);
         

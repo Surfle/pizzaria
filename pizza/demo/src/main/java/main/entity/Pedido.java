@@ -25,5 +25,9 @@ public class Pedido {
 	private Funcionario funcionario;
 	@OneToOne
 	private Cliente cliente;
+	@OneToOne
+	private Sabor sabor;
+	@OneToOne
+	private Produto produto;
 
 }

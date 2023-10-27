@@ -53,8 +53,8 @@ public class EnderecoService {
 		return enderecoDto;
 	}
 	
-	public EnderecoDto include(Long id, EnderecoDto enderecoDto) {
-		Optional<Cliente> cliente = clienteRepository.findById(id);
+	public EnderecoDto include(EnderecoDto enderecoDto) {
+		Optional<Cliente> cliente = clienteRepository.findById(enderecoDto.getCliente().getId());
 
         Assert.notNull(cliente.isPresent(), "Cliente não informado");
         Assert.notNull(enderecoDto.getRua(), "Rua não informada!");
